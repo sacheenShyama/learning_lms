@@ -3,7 +3,7 @@ import React from "react";
 const Home = () => {
   return (
     <div>
-      <p>This is protected page</p>
+      <p>This is protected </p>
     </div>
   );
 };
