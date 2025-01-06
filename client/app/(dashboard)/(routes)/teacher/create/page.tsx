@@ -4,7 +4,6 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
 import {
   Form,
   FormControl,
@@ -40,6 +39,7 @@ const CreatePage = () => {
     try {
       const response = await axios.post("/api/courses", values);
       Router.push(`/teacher/courses/${response.data.id}`);
+      toast.success("Course created successfully");
     } catch (error) {
       toast.error("An error occurred. Please try again.");
     }
