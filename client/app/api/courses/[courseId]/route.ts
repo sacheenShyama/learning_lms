@@ -13,11 +13,7 @@ export async function PATCH(
         if(!userId){
             return new NextResponse("Unauthorized",{status:401});
         }
-        if (!courseId) {
-            return new NextResponse("Course ID is required", { status: 400 });
-        }
-  
-
+       
 const course = await db.course.update({
     where:{
         id:courseId,
