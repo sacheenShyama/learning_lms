@@ -6,15 +6,17 @@ const f = createUploadthing();
 
 const handleAuth =async () => { 
     const {userId}=await auth();
-    if(!userId) throw new Error("Unauthorized")
+    if(!userId) throw new UploadThingError("Unauthorized Access");
     return {userId}
 }; 
-
+const handleUploadComplete = async() => {
+    console.log("upload complete");
+};
 
 export const ourFileRouter = {
- courseImage:f({image:{maxFileSize:"4MB",maxFileCount:1}}).middleware(()=> handleAuth()).onUploadComplete(()=>{}),
- courseAttachment:f(['text','image','video','audio','pdf']).middleware(()=> handleAuth()).onUploadComplete(()=>{}),
- chapterVideo:f({video:{maxFileSize:"128MB",maxFileCount:1}}).middleware(()=> handleAuth()).onUploadComplete(()=>{}),
+ courseImage:f({image:{maxFileSize:"4MB",maxFileCount:1}}).middleware(()=> handleAuth()).onUploadComplete(()=>{handleUploadComplete()}),
+ courseAttachment:f(['text','image','video','audio','pdf']).middleware(()=> handleAuth()).onUploadComplete(()=>{handleUploadComplete()}),
+ chapterVideo:f({video:{maxFileSize:"128MB",maxFileCount:1}}).middleware(()=> handleAuth()).onUploadComplete(()=>{handleUploadComplete()}),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
