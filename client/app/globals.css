@@ -86,5 +86,7 @@ body,
     @apply bg-background text-foreground;
   }
 }
-
+.ql-container {
+  font-size: 14px !important;
+}
 /* @import "~@uploadthing/react/style.css"; */

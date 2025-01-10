@@ -15,10 +15,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Pencil, PlusCircle } from "lucide-react";
+import { Loader2, Pencil, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Chapter, Course } from "@prisma/client";
+import { ChaptersList } from "./chapters-list";
 
 interface ChaptersFormProps {
   initialData: Course & { chapters: Chapter[] };
@@ -54,8 +55,30 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
     }
   };
 
+  const onReorder = async (updateData: { id: string; position: number }[]) => {
+    try {
+      setIsUpdating(true);
+
+      await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
+        list: updateData,
+      });
+      toast.success("chapters reorderd");
+    } catch (error) {
+      toast.error("something went wrong");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+  const onEdit = (id: string) => {
+    router.push(`/teacher/courses/${courseId}/chapters/${id}`);
+  };
   return (
-    <div className="mt-6 bg-slate-100 rounded-md p-4">
+    <div className="relative mt-6 bg-slate-100 rounded-md p-4">
+      {isUpdating && (
+        <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-m flex items-center justify-center">
+          <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
+        </div>
+      )}
       <div className="font-medium flex items-center justify-between">
         Course Description
         <Button variant={"ghost"} onClick={toggleCreating}>
@@ -97,11 +120,22 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
           </form>
         </Form>
       )}
-      {!isCreating && <div className={cn("text-sm mt-2", !initialData.chapters.length && "text-slate-500 italic")}>{!initialData.chapters.length && "No chapters"}</div>}
       {!isCreating && (
-        <p className="text-xs text-muted-foreground mt-4">
-          Drag and drop to reorder chapters
-        </p>
+        <div
+          className={cn(
+            "text-sm mt-2",
+            !initialData.chapters.length && "text-slate-500 italic"
+          )}
+        >
+          {!initialData.chapters.length && "No chapters"}
+        </div>
+      )}
+      {!isCreating && (
+        <ChaptersList
+          onEdit={onEdit}
+          onReorder={onReorder}
+          items={initialData.chapters || []}
+        />
       )}
     </div>
   );
