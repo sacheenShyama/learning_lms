@@ -80,7 +80,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        Course Description
+        Course Chapter
         <Button variant={"ghost"} onClick={toggleCreating}>
           {isCreating ? (
             <>Cancel</>
