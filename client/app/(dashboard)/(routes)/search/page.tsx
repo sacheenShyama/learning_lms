@@ -1,9 +1,24 @@
-import React from 'react'
+import { db } from "@/lib/db";
+import React from "react";
+import { Categories } from "./_components/categories";
+import { SearchInput } from "@/components/search-input";
 
-const SearchPage = () => {
+const SearchPage = async () => {
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
   return (
-    <div>SearchPage</div>
-  )
-}
+    <>
+      <div className="px-6 pt-6 md:hidden md:mb-0 block">
+        <SearchInput />
+      </div>
+      <div className="p-6">
+        <Categories items={categories} />
+      </div>
+    </>
+  );
+};
 
-export default SearchPage
+export default SearchPage;
