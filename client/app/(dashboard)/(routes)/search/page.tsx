@@ -1,11 +1,11 @@
 import { db } from "@/lib/db";
-import React from "react";
-import { Categories } from "./_components/categories";
+import React, { Suspense } from "react";
 import { SearchInput } from "@/components/search-input";
 import { getCourses } from "@/actions/get-courses";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { CoursesList } from "@/components/courses-list";
+import { Categories } from "./_components/categories";
 
 interface SearchPageProps {
   searchParams: {
