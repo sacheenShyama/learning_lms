@@ -2,10 +2,11 @@
 
 import { Search } from "lucide-react";
 import { Input } from "./ui/input";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
+import LoadingAnimation from "./loading-animation";
 
 export const SearchInput = () => {
   const [value, setValue] = useState("");
@@ -36,13 +37,17 @@ export const SearchInput = () => {
 
   return (
     <div className="realtive">
-      <Search className="h-4 w-4 absolute top-3 left-3 text-slate-600" />
-      <Input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        className="w-full md:w-[300px] pl-9 rounded-full bg-slate-100 focus-visible:ring-slate-200"
-        placeholder="Search for a Course"
-      />
+      <Suspense fallback={<LoadingAnimation />}>
+        <Search className="h-4 w-4 absolute top-3 left-3 text-slate-600" />{" "}
+      </Suspense>
+      <Suspense fallback={<LoadingAnimation />}>
+        <Input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="w-full md:w-[300px] pl-9 rounded-full bg-slate-100 focus-visible:ring-slate-200"
+          placeholder="Search for a Course"
+        />
+      </Suspense>
     </div>
   );
 };

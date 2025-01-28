@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { CoursesList } from "@/components/courses-list";
 import { Categories } from "./_components/categories";
+import LoadingAnimation from "@/components/loading-animation";
 
 interface SearchPageProps {
   searchParams: {
@@ -30,13 +31,17 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
   return (
     <>
       <div className="px-6 pt-6 md:hidden md:mb-0 block">
-        <Suspense>
+        <Suspense fallback={<LoadingAnimation />}>
           <SearchInput />
         </Suspense>
       </div>
       <div className="p-6 space-y-4">
-        <Categories items={categories} />
-        <CoursesList items={courses} />
+        <Suspense fallback={<LoadingAnimation />}>
+          <Categories items={categories} />
+        </Suspense>
+        <Suspense fallback={<LoadingAnimation />}>
+          <CoursesList items={courses} />
+        </Suspense>
       </div>
     </>
   );

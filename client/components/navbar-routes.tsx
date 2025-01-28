@@ -2,11 +2,12 @@
 
 import { UserButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
+import LoadingAnimation from "./loading-animation";
 
 const NavbarRoutes = () => {
   const pathname = usePathname();
@@ -19,7 +20,9 @@ const NavbarRoutes = () => {
     <>
       {isSearchPage && (
         <div className="hidden md:block">
-          <SearchInput />
+          <Suspense fallback={<LoadingAnimation />}>
+            <SearchInput />
+          </Suspense>
         </div>
       )}
       <div className="flex gap-x-2 ml-auto">
