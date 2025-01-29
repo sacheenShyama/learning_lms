@@ -1,6 +1,6 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import React, { Suspense } from "react";
 import { Button } from "./ui/button";
@@ -9,7 +9,10 @@ import Link from "next/link";
 import { SearchInput } from "./search-input";
 import LoadingAnimation from "./loading-animation";
 
+import { isTeacher } from "@/lib/teacher";
+
 const NavbarRoutes = () => {
+  const { userId } = useAuth();
   const pathname = usePathname();
 
   const isTeacherPage = pathname?.startsWith("/teacher");
@@ -33,13 +36,13 @@ const NavbarRoutes = () => {
               Exit
             </Button>
           </Link>
-        ) : (
+        ) : isTeacher(userId) ? (
           <Link href={"/teacher/courses"}>
             <Button size={"sm"} variant={"ghost"}>
               Teacher mode
             </Button>
           </Link>
-        )}
+        ) : null}
         <UserButton afterSwitchSessionUrl="/" />
       </div>
     </>
